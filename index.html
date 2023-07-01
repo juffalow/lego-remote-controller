@@ -3,203 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lego PoweredUP</title>
+  <title>Lego PoweredUp</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-  <script src="https://lego.juffalow.com/socket.io/socket.io.js"></script>
 </head>
 <body>
   <div class="container-fluid">
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
       <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-        <span class="fs-4">Lego PoweredUP</span>
+        <span class="fs-4">Lego PoweredUp</span>
       </a>
     </header>
   </div>
 
   <div class="container">
     <div class="row">
-      <div class="col-lg-4 col-xs-12 mt-3">
-        <ul class="list-group">
-          <li class="list-group-item">Lower hub: <span id="hub-0"></span></li>
-          <li class="list-group-item">Upper hub:  <span id="hub-1"></span></li>
-        </ul>
+      <div class="col">
+        <h3>Liebherr R 9800 Excavator</h3>
       </div>
-      <div class="col-lg-4 col-xs-12 mt-3">
-        <div class="row">
-          <div class="col">
-            <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startLeft()" ontouchstart="startLeft()" onmouseup="stopLeft()" ontouchstop="stopLeft()">←</button>
-          </div>
-          <div class="col">
-            <div class="row">
-              <div class="col">
-                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startForward()" ontouchstart="startForward()" onmouseup="stopForward()" ontouchstop="stopForward()">↑</button>
-              </div>
-            </div>
-            <div class="row mt-1">
-              <div class="col">
-                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startBackwards()" ontouchstart="startBackwards()" onmouseup="stopBackwards()" ontouchstop="stopBackwards()">↓</button>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startRight()" ontouchstart="startRight()" onmouseup="stopRight()" ontouchstop="stopRight()">→</button>
-          </div>
-        </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <p>Popis</p>
+        <a class="btn btn-success" href="/excavator.html" role="button">Drive!</a>
       </div>
-      <div class="col-lg-4 col-xs-12 mt-3">
-        <div class="row">
-          <div class="col">
-            <div class="row">
-              <div class="col">
-                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startRotationRight()" ontouchstart="startRotationRight()" onmouseup="stopRotationRight()" ontouchstop="stopRotationRight()">↻</button>
-              </div>
-            </div>
-            <div class="row mt-1">
-              <div class="col">
-                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startRotationLeft()" ontouchstart="startRotationLeft()" onmouseup="stopRotationLeft()" ontouchstop="stopRotationLeft()">↺</button>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="col-2">
+        <img src="/excavator.png" class="img-fluid" />
       </div>
     </div>
   </div>
 
-  <script>
-    const socket = io();
-    const client = io.connect("https://lego.juffalow.com", { reconnect: true, secure: true });
+  <div class="container mt-5">
+    <footer class="row border-top py-5">  
+      <div class="col col-md-4 col-sm-12">
+        <h5>Side projects</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2"><a href="https://quotes.juffalow.com/" class="nav-link p-0 text-body-secondary">Quotes</a></li>
+          <li class="nav-item mb-2"><a href="https://wordle.juffalow.com/" class="nav-link p-0 text-body-secondary">Tech Wordle</a></li>
+          <li class="nav-item mb-2"><a href="https://pentest-tool-lite.com/" class="nav-link p-0 text-body-secondary">Pentest Tool Lite</a></li>
+          <li class="nav-item mb-2"><a href="https://zdielaj.si/" class="nav-link p-0 text-body-secondary">Zdielaj.si</a></li>
+        </ul>
+      </div>
+  
+      <div class="col col-md-4 col-sm-12">
+        <h5>Following</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2"><a href="https://lukasmestan.com/" class="nav-link p-0 text-body-secondary">Lukáš Mešťan</a></li>
+          <li class="nav-item mb-2"><a href="https://www.patrikmasiar.com/" class="nav-link p-0 text-body-secondary">Patrik Mäsiar</a></li>
+        </ul>
+      </div>
+  
+      <div class="col col-md-4 col-sm-12">
+        <h5>Find me on</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2"><a href="https://www.linkedin.com/in/matej-jellus-34459713a/" class="nav-link p-0 text-body-secondary">LinkedIn</a></li>
+          <li class="nav-item mb-2"><a href="https://github.com/juffalow" class="nav-link p-0 text-body-secondary">GitHub</a></li>
+          <li class="nav-item mb-2"><a href="https://twitter.com/juffalow" class="nav-link p-0 text-body-secondary">Twitter</a></li>
+          <li class="nav-item mb-2"><a href="https://instagram.com/juffalow" class="nav-link p-0 text-body-secondary">Instagram</a></li>
+          <li class="nav-item mb-2"><a href="https://www.strava.com/athletes/36216379" class="nav-link p-0 text-body-secondary">Strava</a></li>
+        </ul>
+      </div>
 
-    client.on('connect', async function () {
-      console.log('Connected!');
-
-      document.getElementById('hub-0').innerHTML = '<span class="badge text-bg-secondary">Connecting...</span>';
-      document.getElementById('hub-1').innerHTML = '<span class="badge text-bg-secondary">Connecting...</span>';
-    });
-
-    client.on('poweredup', (message) => {
-      console.log('PoweredUp', message);
-      for (const hub of message.hubs) {
-        if (hub.status === 'connected') {
-          document.getElementById(`hub-${hub.index}`).innerHTML = '<span class="badge text-bg-success">Connected</span>';
-        } else {
-          document.getElementById(`hub-${hub.index}`).innerHTML = '<span class="badge text-bg-danger">Disconnected</span>';
-        }
-      }
-
-      if (message.hubs.length === 0) {
-        client.emit('scan', 'start');
-      }
-
-      if (message.hubs.length === 1) {
-        client.emit('scan', 'start');
-      }
-    });
-
-    function startForward() {
-      console.log('forward:start');
-      client.emit('command', {
-        hub: 0,
-        a: { power: 100 },
-        b: { power: -100 },
-      });
-    }
-
-    function stopForward() {
-      console.log('forward:stop');
-      client.emit('command', {
-        hub: 0,
-        a: { power: 0 },
-        b: { power: 0 },
-      });
-    }
-
-    function startBackwards() {
-      console.log('backwards:start');
-      client.emit('command', {
-        hub: 0,
-        a: { power: -100 },
-        b: { power: 100 },
-      });
-    }
-
-    function stopBackwards() {
-      console.log('backwards:stop');
-      client.emit('command', {
-        hub: 0,
-        a: { power: 0 },
-        b: { power: 0 },
-      });
-    }
-
-    function startRight() {
-      console.log('right:start');
-      client.emit('command', {
-        hub: 0,
-        a: { power: -100 },
-        b: { power: -100 },
-      });
-    }
-
-    function stopRight() {
-      console.log('right:stop');
-      client.emit('command', {
-        hub: 0,
-        a: { power: 0 },
-        b: { power: 0 },
-      });
-    }
-
-    function startLeft() {
-      console.log('left:start');
-      client.emit('command', {
-        hub: 0,
-        a: { power: 100 },
-        b: { power: 100 },
-      });
-    }
-
-    function stopLeft() {
-      console.log('left:stop');
-      client.emit('command', {
-        hub: 0,
-        a: { power: 0 },
-        b: { power: 0 },
-      });
-    }
-
-    function startRotationLeft() {
-      console.log('rotationLeft:start');
-      client.emit('command', {
-        hub: 0,
-        d: { power: 100 },
-      });
-    }
-
-    function stopRotationLeft() {
-      console.log('rotationLeft:stop');
-      client.emit('command', {
-        hub: 0,
-        d: { power: 0 },
-      });
-    }
-
-    function startRotationRight() {
-      console.log('rotationLeft:start');
-      client.emit('command', {
-        hub: 0,
-        d: { power: -100 },
-      });
-    }
-
-    function stopRotationRight() {
-      console.log('rotationLeft:stop');
-      client.emit('command', {
-        hub: 0,
-        d: { power: 0 },
-      });
-    }
-  </script>
+      <div class="col-12 text-center mt-1">
+        <p><a href="https://juffalow.com" style="text-decoration: none; color: var(--bs-body-color);">Matej 'juffalow' Jellus</a> | 2023</p>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>

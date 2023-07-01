@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liebherr R 9800 Excavator | Lego PoweredUp</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  <script src="https://lego.juffalow.com/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <div class="container-fluid">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+        <span class="fs-4">Lego PoweredUp</span>
+      </a>
+    </header>
+  </div>
+
+  <div class="container mt-3">
+    <div class="row">
+      <div class="col">
+        <h1>Liebherr R 9800 Excavator</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 col-xs-12 mt-3">
+        <ul class="list-group">
+          <li class="list-group-item">Lower hub: <span id="hub-0"></span></li>
+          <li class="list-group-item">Upper hub:  <span id="hub-1"></span></li>
+        </ul>
+      </div>
+      <div class="col-lg-4 col-xs-12 mt-3">
+        <div class="row">
+          <div class="col">
+            <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startLeft()" ontouchstart="startLeft()" onmouseup="stopLeft()" ontouchstop="stopLeft()">←</button>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startForward()" ontouchstart="startForward()" onmouseup="stopForward()" ontouchstop="stopForward()">↑</button>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startBackwards()" ontouchstart="startBackwards()" onmouseup="stopBackwards()" ontouchstop="stopBackwards()">↓</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startRight()" ontouchstart="startRight()" onmouseup="stopRight()" ontouchstop="stopRight()">→</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-xs-12 mt-3">
+        <div class="row">
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startRotationRight()" ontouchstart="startRotationRight()" onmouseup="stopRotationRight()" ontouchstop="stopRotationRight()">↻</button>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startRotationLeft()" ontouchstart="startRotationLeft()" onmouseup="stopRotationLeft()" ontouchstop="stopRotationLeft()">↺</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="send(1, 'a', 100)" ontouchstart="send(1, 'a', 100)" onmouseup="send(1, 'a', 0)" ontouchstop="send(1, 'a', 0)">1</button>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="send(1, 'a', -100)" ontouchstart="send(1, 'a', -100)" onmouseup="send(1, 'a', 0)" ontouchstop="send(1, 'a', 0)">2</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="send(1, 'b', 100)" ontouchstart="send(1, 'b', 100)" onmouseup="send(1, 'b', 0)" ontouchstop="send(1, 'b', 0)">3</button>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="send(1, 'b', -100)" ontouchstart="send(1, 'b', -100)" onmouseup="send(1, 'b', 0)" ontouchstop="send(1, 'b', 0)">4</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="send(1, 'c', 100)" ontouchstart="send(1, 'c', 100)" onmouseup="send(1, 'c', 0)" ontouchstop="send(1, 'c', 0)">5</button>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="send(1, 'c', -100)" ontouchstart="send(1, 'c', -100)" onmouseup="send(1, 'c', 0)" ontouchstop="send(1, 'c', 0)">6</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="send(1, 'd', 100)" ontouchstart="send(1, 'd', 100)" onmouseup="send(1, 'd', 0)" ontouchstop="send(1, 'd', 0)">7</button>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="send(1, 'd', -100)" ontouchstart="send(1, 'd', -100)" onmouseup="send(1, 'd', 0)" ontouchstop="send(1, 'd', 0)">8</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const client = io();
+
+    client.on('connect', async function () {
+      console.log('Connected!');
+    });
+
+    client.on('poweredup', (message) => {
+      console.log('PoweredUp', message);
+      console.log('Object.keys(message).length', Object.keys(message).length)
+
+      if (Object.keys(message).length === 0) {
+        document.getElementById('hub-0').innerHTML = '<span class="badge text-bg-danger">Driver is not connected!</span>';
+        document.getElementById('hub-1').innerHTML = '<span class="badge text-bg-danger">Driver is not connected!</span>';
+
+        return;
+      }
+
+      if (message.hubs.length === 0) {
+        document.getElementById('hub-0').innerHTML = '<span class="badge text-bg-secondary">Connecting...</span>';
+        document.getElementById('hub-1').innerHTML = '';
+      }
+
+      if (message.hubs.length === 1 && message.hubs[0].status === 'connected') {
+        document.getElementById('hub-0').innerHTML = '<span class="badge text-bg-success">Connected</span>';
+        document.getElementById('hub-1').innerHTML = '<span class="badge text-bg-secondary">Connecting...</span>';
+      }
+
+      if (message.hubs.length === 2) {
+        for (const hub of message.hubs) {
+          if (hub.status === 'connected') {
+            document.getElementById(`hub-${hub.index}`).innerHTML = '<span class="badge text-bg-success">Connected</span>';
+          } else {
+            document.getElementById(`hub-${hub.index}`).innerHTML = '<span class="badge text-bg-danger">Disconnected</span>';
+          }
+        }
+      }
+
+      if (message.hubs.length === 0) {
+        client.emit('scan', 'start');
+      }
+
+      if (message.hubs.length === 2) {
+        client.emit('scan', 'stop');
+      }
+    });
+
+    function startForward() {
+      console.log('forward:start');
+      client.emit('command', {
+        hub: 0,
+        a: { power: 100 },
+        b: { power: -100 },
+      });
+    }
+
+    function stopForward() {
+      console.log('forward:stop');
+      client.emit('command', {
+        hub: 0,
+        a: { power: 0 },
+        b: { power: 0 },
+      });
+    }
+
+    function startBackwards() {
+      console.log('backwards:start');
+      client.emit('command', {
+        hub: 0,
+        a: { power: -100 },
+        b: { power: 100 },
+      });
+    }
+
+    function stopBackwards() {
+      console.log('backwards:stop');
+      client.emit('command', {
+        hub: 0,
+        a: { power: 0 },
+        b: { power: 0 },
+      });
+    }
+
+    function startRight() {
+      console.log('right:start');
+      client.emit('command', {
+        hub: 0,
+        a: { power: -100 },
+        b: { power: -100 },
+      });
+    }
+
+    function stopRight() {
+      console.log('right:stop');
+      client.emit('command', {
+        hub: 0,
+        a: { power: 0 },
+        b: { power: 0 },
+      });
+    }
+
+    function startLeft() {
+      console.log('left:start');
+      client.emit('command', {
+        hub: 0,
+        a: { power: 100 },
+        b: { power: 100 },
+      });
+    }
+
+    function stopLeft() {
+      console.log('left:stop');
+      client.emit('command', {
+        hub: 0,
+        a: { power: 0 },
+        b: { power: 0 },
+      });
+    }
+
+    function startRotationLeft() {
+      console.log('rotationLeft:start');
+      client.emit('command', {
+        hub: 0,
+        d: { power: 100 },
+      });
+    }
+
+    function stopRotationLeft() {
+      console.log('rotationLeft:stop');
+      client.emit('command', {
+        hub: 0,
+        d: { power: 0 },
+      });
+    }
+
+    function startRotationRight() {
+      console.log('rotationLeft:start');
+      client.emit('command', {
+        hub: 0,
+        d: { power: -100 },
+      });
+    }
+
+    function stopRotationRight() {
+      console.log('rotationLeft:stop');
+      client.emit('command', {
+        hub: 0,
+        d: { power: 0 },
+      });
+    }
+
+    function send(hub, motor, power) {
+      console.log({ hub, motor, power });
+
+      client.emit('command', {
+        hub,
+        [motor]: { power },
+      });
+    }
+  </script>
+</body>
+</html>

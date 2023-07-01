@@ -7,26 +7,30 @@ const io = new Server(server);
 
 let driver = null;
 let clients = [];
-const cache = {
-  poweredup: {
-    hubs: [],
-  },
-};
 
 io.on('connection', (socket) => {
-  console.log('New connection!');
-
   if (socket.handshake.query.driver === 'true') {
-    console.log('Driver connected!');
+    console.log('Driver connected!', { id: socket.id });
     driver = socket;
   } else {
+    console.log('Client connected!', { id: socket.id });
+
     clients.push(socket);
-    
-    socket.emit('poweredup', cache['poweredup']);
+    socket.emit('poweredup', driver !== null && 'poweredup' in driver ? driver.poweredup : {});
   }
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    if (driver !== null && driver.id === socket.id) {
+      console.log('Driver disconnected!');
+      driver = null;
+
+      for (const client of clients) {
+        client.emit('poweredup', {});
+      }
+    } else {
+      console.log('Client disconnected!');
+      clients = clients.filter(client => client.id === socket.id);
+    }
   });
 
   socket.on('command', (message) => {
@@ -46,7 +50,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('poweredup', (message) => {
-    cache['poweredup'] = message;
+    driver['poweredup'] = message;
 
     for (const client of clients) {
       client.emit('poweredup', message);
@@ -56,6 +60,18 @@ io.on('connection', (socket) => {
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/localhost', (req, res) => {
+  res.sendFile(__dirname + '/localhost.html');
+});
+
+app.get('/excavator.html', (req, res) => {
+  res.sendFile(__dirname + '/excavator.html');
+});
+
+app.get('/excavator.png', (req, res) => {
+  res.sendFile(__dirname + '/excavator.png');
 });
 
 server.listen(3010, () => {
