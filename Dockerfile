@@ -13,4 +13,4 @@ RUN yarn install --frozen-lockfile --production
 
 EXPOSE 3010
 
-CMD [ "node", "dist/index.js" ]
+CMD [ "node", "server.js" ]
