@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lego PoweredUP</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <div class="container-fluid">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+        <span class="fs-4">Lego PoweredUP</span>
+      </a>
+    </header>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 col-xs-12 mt-3">
+        <ul class="list-group">
+          <li class="list-group-item">Lower hub: <span id="hub-0"><span class="badge text-bg-success">Connected</span></span></li>
+          <li class="list-group-item">Upper hub:  <span id="hub-1"><span class="badge text-bg-danger">Disconnected</span></span></li>
+        </ul>
+      </div>
+      <div class="col-lg-4 col-xs-12 mt-3">
+        <div class="row">
+          <div class="col">
+            <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startLeft()" onmouseup="stopLeft()">←</button>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startForward()" onmouseup="stopForward()">↑</button>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startBackwards()" onmouseup="stopBackwards()">↓</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startRight()" onmouseup="stopRight()">→</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-xs-12 mt-3">
+        <div class="row">
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startRotationRight()" onmouseup="stopRotationRight()">↻</button>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col">
+                <button type="button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="startRotationLeft()" onmouseup="stopRotationLeft()">↺</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const socket = io();
+    const client = io.connect("http://localhost:3000", { reconnect: true });
+
+    client.on('connect', async function () {
+      console.log('Connected!');
+
+      document.getElementById('hub-0').innerHTML = '<span class="badge text-bg-secondary">Connecting...</span>';
+      document.getElementById('hub-1').innerHTML = '<span class="badge text-bg-secondary">Connecting...</span>';
+    });
+
+    client.on('poweredup', (message) => {
+      console.log('PoweredUp', message);
+      for (const hub of message.hubs) {
+        document.getElementById(`hub-${hub.index}`).innerHTML = '<span class="badge text-bg-success">Connected</span>';
+      }
+
+      if (message.hubs.length === 0) {
+        client.emit('scan', 'start');
+      }
+
+      if (message.hubs.length === 1) {
+        client.emit('scan', 'start');
+      }
+    });
+
+    function startForward() {
+      console.log('forward:start');
+      client.emit('command', {
+        hub: 0,
+        a: { power: 100 },
+        b: { power: -100 },
+      });
+    }
+
+    function stopForward() {
+      console.log('forward:stop');
+      client.emit('command', {
+        hub: 0,
+        a: { power: 0 },
+        b: { power: 0 },
+      });
+    }
+
+    function startBackwards() {
+      console.log('backwards:start');
+      client.emit('command', {
+        hub: 0,
+        a: { power: -100 },
+        b: { power: 100 },
+      });
+    }
+
+    function stopBackwards() {
+      console.log('backwards:stop');
+      client.emit('command', {
+        hub: 0,
+        a: { power: 0 },
+        b: { power: 0 },
+      });
+    }
+
+    function startRight() {
+      console.log('right:start');
+      client.emit('command', {
+        hub: 0,
+        a: { power: -100 },
+        b: { power: -100 },
+      });
+    }
+
+    function stopRight() {
+      console.log('right:stop');
+      client.emit('command', {
+        hub: 0,
+        a: { power: 0 },
+        b: { power: 0 },
+      });
+    }
+
+    function startLeft() {
+      console.log('left:start');
+      client.emit('command', {
+        hub: 0,
+        a: { power: 100 },
+        b: { power: 100 },
+      });
+    }
+
+    function stopLeft() {
+      console.log('left:stop');
+      client.emit('command', {
+        hub: 0,
+        a: { power: 0 },
+        b: { power: 0 },
+      });
+    }
+
+    function startRotationLeft() {
+      console.log('rotationLeft:start');
+      client.emit('command', {
+        hub: 0,
+        d: { power: 100 },
+      });
+    }
+
+    function stopRotationLeft() {
+      console.log('rotationLeft:stop');
+      client.emit('command', {
+        hub: 0,
+        d: { power: 0 },
+      });
+    }
+
+    function startRotationRight() {
+      console.log('rotationLeft:start');
+      client.emit('command', {
+        hub: 0,
+        d: { power: -100 },
+      });
+    }
+
+    function stopRotationRight() {
+      console.log('rotationLeft:stop');
+      client.emit('command', {
+        hub: 0,
+        d: { power: 0 },
+      });
+    }
+  </script>
+</body>
+</html>
