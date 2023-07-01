@@ -1,7 +1,7 @@
 FROM node:18
 
-RUN addgroup --gid 3000 --system juffgroup \
-  && adduser  --uid 2000 --system --ingroup juffgroup juffuser
+RUN addgroup --system juffgroup \
+  && adduser --system --ingroup juffgroup juffuser
 
 USER 2000:3000
 
