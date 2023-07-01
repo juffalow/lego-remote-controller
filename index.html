@@ -7,7 +7,7 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script src="https://lego.juffalow.com/socket.io/socket.io.js"></script>
 </head>
 <body>
   <div class="container-fluid">
@@ -22,8 +22,8 @@
     <div class="row">
       <div class="col-lg-4 col-xs-12 mt-3">
         <ul class="list-group">
-          <li class="list-group-item">Lower hub: <span id="hub-0"><span class="badge text-bg-success">Connected</span></span></li>
-          <li class="list-group-item">Upper hub:  <span id="hub-1"><span class="badge text-bg-danger">Disconnected</span></span></li>
+          <li class="list-group-item">Lower hub: <span id="hub-0"></span></li>
+          <li class="list-group-item">Upper hub:  <span id="hub-1"></span></li>
         </ul>
       </div>
       <div class="col-lg-4 col-xs-12 mt-3">
@@ -69,7 +69,7 @@
 
   <script>
     const socket = io();
-    const client = io.connect("http://localhost:3000", { reconnect: true });
+    const client = io.connect("https://lego.juffalow.com", { reconnect: true, secure: true });
 
     client.on('connect', async function () {
       console.log('Connected!');
@@ -81,7 +81,11 @@
     client.on('poweredup', (message) => {
       console.log('PoweredUp', message);
       for (const hub of message.hubs) {
-        document.getElementById(`hub-${hub.index}`).innerHTML = '<span class="badge text-bg-success">Connected</span>';
+        if (hub.status === 'connected') {
+          document.getElementById(`hub-${hub.index}`).innerHTML = '<span class="badge text-bg-success">Connected</span>';
+        } else {
+          document.getElementById(`hub-${hub.index}`).innerHTML = '<span class="badge text-bg-danger">Disconnected</span>';
+        }
       }
 
       if (message.hubs.length === 0) {
