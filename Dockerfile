@@ -1,14 +1,13 @@
 FROM node:18
 
-RUN addgroup --system juffgroup \
-  && adduser --system --ingroup juffgroup juffuser
+RUN adduser --home /home/juffuser juffuser
 
-USER 2000:3000
+USER juffuser
 
 RUN mkdir /home/juffuser/lego-server/
 WORKDIR /home/juffuser/lego-server/
 
-COPY --chown=juffuser:juffgroup . .
+COPY --chown=juffuser . .
 
 RUN yarn install --frozen-lockfile --production
 
