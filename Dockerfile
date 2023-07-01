@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:18
 
 RUN addgroup --gid 3000 --system juffgroup \
   && adduser  --uid 2000 --system --ingroup juffgroup juffuser
