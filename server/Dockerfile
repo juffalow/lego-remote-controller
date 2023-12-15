@@ -7,7 +7,7 @@ USER juffuser
 RUN mkdir /home/juffuser/lego-server/
 WORKDIR /home/juffuser/lego-server/
 
-COPY --chown=juffuser ./server .
+COPY --chown=juffuser ./ .
 
 RUN yarn install --frozen-lockfile --production
 
