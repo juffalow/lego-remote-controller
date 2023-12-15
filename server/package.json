@@ -1,0 +1,18 @@
+{
+  "name": "lego-technic-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.1"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "lego",
+    "technic",
+    "poweredup"
+  ]
+}

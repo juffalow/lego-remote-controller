@@ -5,13 +5,17 @@ on:
     types:
       - published
 
+defaults:
+  run:
+    working-directory: ./server
+
 jobs:
   build:
     name: Build server container with tag version
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 1
     - name: Set variables

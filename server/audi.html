@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audi RS Q E-Tron | Lego Remote Controller</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  <script src="https://lego.juffalow.com/socket.io/socket.io.js"></script>
+
+  <link rel="icon" href="https://juffalow.com/img/emoticon_small.png">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg border-bottom">
+    <div class="container-fluid">
+      <a class="navbar-brand fs-4" href="/">Lego Remote Controller</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav me-auto mb-2 mb-lg-0">
+        </div>
+        <div class="d-flex">
+          <a class="nav-link fs-5" aria-current="page" href="https://github.com/juffalow/lego-remote-controller">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col">
+        <h1>Audi RS Q E-Tron</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-xs-12 mt-3">
+        <div class="accordion" id="lego-hubs">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hub-0-data" aria-expanded="false" aria-controls="hub-0-data">
+                Hub: <span id="hub-0" class="ms-2"></span>
+              </button>
+            </h2>
+            <div id="hub-0-data" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                <b>Tilt</b>
+                <ul>
+                  <li class="list-group-item">X: <span id="tilt-x"></span></li>
+                  <li class="list-group-item">Y: <span id="tilt-y"></span></li>
+                  <li class="list-group-item">Z: <span id="tilt-z"></span></li>
+                </ul>
+                <b>Accelerometer</b>
+                <ul>
+                  <li class="list-group-item">X: <span id="accel-x"></span></li>
+                  <li class="list-group-item">Y: <span id="accel-y"></span></li>
+                  <li class="list-group-item">Z: <span id="accel-z"></span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gamepad-0-data" aria-expanded="false" aria-controls="gamepad-0-data">
+                Gamepad: <span id="gamepad-0" class="ms-2"></span>
+              </button>
+            </h2>
+            <div id="gamepad-0-data" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                <p>Left joistick: <span id="gamepad-0-speed"></span></p>
+                <p>Right joistick: <span id="gamepad-0-angle"></span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-xs-12 mt-3">
+        <div class="row">
+          <div class="col">
+            <button type="button" id="left-button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="updateAngle(-120, 100)" ontouchstart="updateAngle(-120, 100)" onmouseup="updateAngle(0, 100)" ontouchstop="updateAngle(0, 100)">←</button>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <button type="button" id="forward-button" class="btn btn-secondary" style="width: 100%; height: 100%; min-height: 3rem;" onmousedown="updateForward(100)" ontouchstart="updateForward(100)" onmouseup="updateForward(0)" ontouchstop="updateForward(0)">↑</button>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col">
+                <button type="button" id="backwards-button" class="btn btn-secondary" style="width: 100%; height: 100%; min-height: 3rem;" onmousedown="updateForward(-100)" ontouchstart="updateForward(-100)" onmouseup="updateForward(0)" ontouchstop="updateForward(0)">↓</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <button type="button" id="right-button" class="btn btn-secondary" style="width: 100%; height: 100%" onmousedown="updateAngle(120, 100)" ontouchstart="updateAngle(120, 100)" onmouseup="updateAngle(0, 100)" ontouchstop="updateAngle(0, 100)">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tiltX = document.getElementById('tilt-x');
+    const tiltY = document.getElementById('tilt-y');
+    const tiltZ = document.getElementById('tilt-z');
+
+    const accelX = document.getElementById('accel-x');
+    const accelY = document.getElementById('accel-y');
+    const accelZ = document.getElementById('accel-z');
+
+    const client = io();
+
+    client.on('connect', async function () {
+      console.log('Connected!');
+    });
+
+    client.on('poweredup', (message) => {
+      console.log('PoweredUp', message);
+      console.log('Object.keys(message).length', Object.keys(message).length)
+
+      if (Object.keys(message).length === 0) {
+        document.getElementById('hub-0').innerHTML = '<span class="badge text-bg-danger">Driver is not connected!</span>';
+
+        return;
+      }
+
+      if (message.hubs.length === 0) {
+        document.getElementById('hub-0').innerHTML = '<span class="badge text-bg-secondary">Connecting...</span>';
+      }
+
+      if (message.hubs.length === 1 && message.hubs[0].status === 'connected') {
+        document.getElementById('hub-0').innerHTML = '<span class="badge text-bg-success">Connected</span>';
+      }
+
+      if (message.hubs.length === 0) {
+        client.emit('scan', 'start');
+      }
+
+      if (message.hubs.length === 1) {
+        client.emit('scan', 'stop');
+      }
+    });
+
+    client.on('tilt', (message) => {
+      console.log('tilt', message);
+      
+      tiltX.innerHTML = message.x;
+      tiltY.innerHTML = message.y;
+      tiltZ.innerHTML = message.z;
+    });
+
+    client.on('accel', (message) => {
+      console.log('accel', message);
+
+      accelX.innerHTML = message.x;
+      accelY.innerHTML = message.y;
+      accelZ.innerHTML = message.z;
+
+      console.log('calcRoll', calcRoll(message.y, message.z));
+      console.log('calcPitch', calcPitch(message.x, message.y, message.z));
+    });
+
+    function updateForward(value) {
+      value = typeof value === 'undefined' ? 100 : value;
+
+      console.log('updateForward', value);
+
+      if (value > 0) {
+        document.getElementById('forward-button').style.backgroundColor = `rgba(25, 135, 84, ${Math.abs(value / 100)})`;
+        document.getElementById('backwards-button').style.backgroundColor = '';
+      } else if (value < 0) {
+        document.getElementById('backwards-button').style.backgroundColor = `rgba(25, 135, 84, ${Math.abs(value / 100)})`;
+        document.getElementById('forward-button').style.backgroundColor = '';
+      } else {
+        document.getElementById('forward-button').style.backgroundColor = '';
+        document.getElementById('backwards-button').style.backgroundColor = '';
+      }
+
+      client.emit('command', {
+        hub: 0,
+        a: { power: value },
+        b: { power: value },
+      });
+    }
+
+    function updateAngle(angle, speed) {
+      console.log('updateAngle', angle, speed);
+
+      if (angle > 0) {
+        document.getElementById('right-button').style.backgroundColor = `rgba(25, 135, 84, ${Math.abs(angle / 120)})`;
+        document.getElementById('left-button').style.backgroundColor = '';
+      } else if (angle < 0) {
+        document.getElementById('left-button').style.backgroundColor = `rgba(25, 135, 84, ${Math.abs(angle / 120)})`;
+        document.getElementById('right-button').style.backgroundColor = '';
+      } else {
+        document.getElementById('left-button').style.backgroundColor = '';
+        document.getElementById('right-button').style.backgroundColor = '';
+      }
+
+      client.emit('command', {
+        hub: 0,
+        d: { angle, speed },
+      });
+    }
+
+    function send(hub, motor, power) {
+      console.log({ hub, motor, power });
+
+      client.emit('command', {
+        hub,
+        [motor]: { power },
+      });
+    }
+
+    window.addEventListener("gamepadconnected", (e) => {
+      document.getElementById('gamepad-0').innerHTML = '<span class="badge text-bg-success">Connected</span>';
+
+      // setInterval(updateStatus, 500);
+      requestAnimationFrame(updateStatus);
+    });
+
+    let lastForward = 0;
+    let lastAngle = 0;
+
+    function updateStatus() {
+      const gamepad = navigator.getGamepads()[0];
+      const speed = parseInt(gamepad.axes[1] * 100) * -1;
+      const forward = speed < 8 && speed > -8 ? 0 : speed;
+
+      if (cmp(forward, lastForward)) {
+        console.log('--------------> updateForward', { forward, lastForward, speed });
+
+        lastForward = forward;
+        
+        document.getElementById('gamepad-0-speed').innerHTML = forward;
+        updateForward(forward);
+      }
+
+      const spin = parseInt(gamepad.axes[2] * 100);
+      const angle = spin < 8 && spin > -8 ? 0 : spin;
+
+      if (cmp(angle, lastAngle)) {
+        console.log('--------------> updateForward', { angle, lastAngle, spin });
+
+        lastAngle = angle;
+
+        document.getElementById('gamepad-0-angle').innerHTML = angle;
+        updateAngle(angle, 100);
+      }
+
+      requestAnimationFrame(updateStatus);
+    }
+
+    function cmp(a, b) {
+      return Math.abs(a - b) > 8;
+    }
+    function calcRoll(y, z){
+      return Math.atan2(y, z) * 180/Math.PI;
+    }
+
+    function calcPitch(x, y, z){
+      return Math.atan2(-x, Math.sqrt(y*y + z*z)) * 180/Math.PI;
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp' && lastForward !== 100) {
+        lastForward = 100;
+        updateForward(100);
+      }
+
+      if (e.key === 'ArrowDown' && lastForward !== -100) {
+        lastForward = -100;
+        updateForward(-100);
+      }
+
+      if (e.key === 'ArrowLeft' && lastAngle !== -120) {
+        lastAngle = -120;
+        updateAngle(-120, 100);
+      }
+
+      if (e.key === 'ArrowRight' && lastAngle !== 120) {
+        lastAngle = 120;
+        updateAngle(120, 100);
+      }
+    });
+
+    document.addEventListener('keyup', (e) => {
+      if (e.key === 'ArrowUp') {
+        lastForward = 0;
+        updateForward(0);
+      }
+
+      if (e.key === 'ArrowDown') {
+        lastForward = 0;
+        updateForward(0);
+      }
+
+      if (e.key === 'ArrowLeft') {
+        lastAngle = 0;
+        updateAngle(0, 100);
+      }
+
+      if (e.key === 'ArrowRight') {
+        lastAngle = 0;
+        updateAngle(0, 100);
+      }
+    });
+  </script>
+</body>
+</html>
